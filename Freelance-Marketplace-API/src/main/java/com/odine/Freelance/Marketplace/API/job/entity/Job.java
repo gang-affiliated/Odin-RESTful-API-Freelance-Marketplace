@@ -1,5 +1,7 @@
 package com.odine.Freelance.Marketplace.API.job.entity;
 
+import com.odine.Freelance.Marketplace.API.comment.entity.Comment;
+import com.odine.Freelance.Marketplace.API.freelancer.entity.Freelancer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,9 +9,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "jobs")
@@ -19,9 +26,9 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Scope-aligned model: each job references one freelancer.
-    @Column(nullable = false)
-    private Long freelancerId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "freelancer_id", nullable = false)
+    private Freelancer freelancer;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
@@ -32,6 +39,9 @@ public class Job {
 
     @Column(nullable = false, length = 2000)
     private String description;
+
+    @OneToMany(mappedBy = "job")
+    private Set<Comment> comments = new HashSet<>();
 
     @PrePersist
     void onCreate() {
@@ -48,12 +58,12 @@ public class Job {
         this.id = id;
     }
 
-    public Long getFreelancerId() {
-        return freelancerId;
+    public Freelancer getFreelancer() {
+        return freelancer;
     }
 
-    public void setFreelancerId(Long freelancerId) {
-        this.freelancerId = freelancerId;
+    public void setFreelancer(Freelancer freelancer) {
+        this.freelancer = freelancer;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -78,5 +88,13 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

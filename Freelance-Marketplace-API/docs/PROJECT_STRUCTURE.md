@@ -70,7 +70,6 @@ Freelance-Marketplace-API/
         comment/CommentControllerTest.java
   docs/
     DEMO_PRODUCT_BRIEF.md
-    API_CONTRACT_DRAFT.md
     PROJECT_STRUCTURE.md
   pom.xml
   README.md
@@ -89,3 +88,18 @@ Freelance-Marketplace-API/
 - `Freelancer` is a root aggregate for profile data
 - `Job` belongs to one `Freelancer`
 - `Comment` belongs to one `Job`
+
+## Modeling Decision
+
+- Used entity references for relationship modeling (`Job -> Freelancer`, `Comment -> Job`) to keep cardinality explicit in code while still persisting normalized foreign keys in separate tables.
+
+## Current vs Planned
+
+- Implemented now:
+  - `freelancer/controller/FreelancerController`
+  - `freelancer/dto/FreelancerCreateRequest`, `FreelancerResponse`
+  - `freelancer/service/FreelancerService`, `FreelancerEvaluationService`
+  - `common/exception/GlobalExceptionHandler`
+  - `common/response/ApiErrorResponse`
+- Planned next:
+  - Job and Comment controllers/services/DTO completion

@@ -64,38 +64,13 @@ This demo explains:
 - Search endpoints optimized for common filters
 - Audit-friendly timestamps for job and comment entities
 - Separation of concerns (controller/service/repository layers)
+- Explicit relationship modeling in JPA entities, while keeping normalized tables and foreign keys at database level
 
 ## 6) Delivery Plan
 
-### Milestone 1 - Foundation
+The first delivery increment includes finalized domain modeling for Freelancer, Job, and Comment plus a working Freelancer API slice.
+This slice demonstrates create/get/list/search flows, validation rules, and asynchronous evaluation status updates.
 
-- Finalize package structure
-- Create entities, enums, repositories
-- Configure PostgreSQL and environments
+The next increment completes Job and Comment endpoints with the same service/controller/error-handling approach.
 
-### Milestone 2 - Core APIs
-
-- Implement Freelancer, Job, Comment CRUD flows
-- Add filter/search endpoint for freelancers
-- Implement update paths with validation
-
-### Milestone 3 - Async Evaluation + Quality
-
-- Mock async evaluation on freelancer create
-- Add unit/integration tests for key flows
-- Add Swagger docs + Postman collection
-
-### Milestone 4 - Delivery
-
-- Final README and run guide
-- Docker support (optional)
-- GitHub submission package
-
-## 7) Risks and Mitigation
-
-- **Risk:** unclear search semantics for multi-filter queries  
-  **Mitigation:** define exact matching/contains behavior before coding
-- **Risk:** async score expectations unclear to business users  
-  **Mitigation:** expose score status field and demo lifecycle in API docs
-- **Risk:** environment setup friction (Java/Maven/DB)  
-  **Mitigation:** use Maven wrapper and provide one-command startup guide
+Final packaging will include tests, Swagger/Postman artifacts, and submission-ready project documentation.

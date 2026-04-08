@@ -1,81 +1,24 @@
-package com.odine.Freelance.Marketplace.API.freelancer.entity;
+package com.odine.Freelance.Marketplace.API.freelancer.dto;
 
-import com.odine.Freelance.Marketplace.API.job.entity.Job;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.HashMap;
-import java.util.HashSet;
+import com.odine.Freelance.Marketplace.API.freelancer.entity.EvaluationStatus;
+import com.odine.Freelance.Marketplace.API.freelancer.entity.FreelancerType;
 import java.util.Map;
 import java.util.Set;
 
-@Entity
-@Table(name = "freelancers")
-public class Freelancer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FreelancerResponse {
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
     private String phone;
-
-    @Column(nullable = false)
     private String city;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private FreelancerType freelancerType;
-
-    @Column
     private String portfolioUrl;
-
-    @ElementCollection
-    @CollectionTable(name = "freelancer_design_tools", joinColumns = @JoinColumn(name = "freelancer_id"))
-    @Column(name = "tool_name")
-    private Set<String> designTools = new HashSet<>();
-
-    @ElementCollection
-    @CollectionTable(name = "freelancer_languages", joinColumns = @JoinColumn(name = "freelancer_id"))
-    @Column(name = "language_name")
-    private Set<String> softwareLanguages = new HashSet<>();
-
-    @ElementCollection
-    @CollectionTable(name = "freelancer_specialties", joinColumns = @JoinColumn(name = "freelancer_id"))
-    @Column(name = "specialty_name")
-    private Set<String> specialties = new HashSet<>();
-
-    @Column
+    private Set<String> designTools;
+    private Set<String> softwareLanguages;
+    private Set<String> specialties;
     private Integer evaluationScore;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EvaluationStatus evaluationStatus = EvaluationStatus.PENDING;
-
-    @ElementCollection
-    @CollectionTable(name = "freelancer_additional_fields", joinColumns = @JoinColumn(name = "freelancer_id"))
-    @MapKeyColumn(name = "field_key")
-    @Column(name = "field_value")
-    private Map<String, String> additionalFields = new HashMap<>();
-
-    @OneToMany(mappedBy = "freelancer")
-    private Set<Job> jobs = new HashSet<>();
+    private EvaluationStatus evaluationStatus;
+    private Map<String, String> additionalFields;
 
     public Long getId() {
         return id;
@@ -179,13 +122,5 @@ public class Freelancer {
 
     public void setAdditionalFields(Map<String, String> additionalFields) {
         this.additionalFields = additionalFields;
-    }
-
-    public Set<Job> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(Set<Job> jobs) {
-        this.jobs = jobs;
     }
 }
