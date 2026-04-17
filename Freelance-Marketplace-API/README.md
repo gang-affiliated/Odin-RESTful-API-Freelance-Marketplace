@@ -1,7 +1,6 @@
-# Odine Freelance Marketplace API (Demo Blueprint)
+# Odine Freelance Marketplace API
 
-This repository is currently a **demo + thin-implementation version** of the backend product.
-Its purpose is to communicate target architecture and show a working vertical slice before full implementation.
+This repository contains the backend implementation for the Odine Freelance Marketplace API.
 
 ## Product Goal
 
@@ -25,49 +24,87 @@ Build a REST API for a freelance marketplace that supports:
 - Spring Boot 3+
 - Maven Wrapper (`mvnw.cmd`)
 - PostgreSQL
+- RabbitMQ
 - JPA/Hibernate + validation
+- Swagger/OpenAPI (springdoc)
 
-## Run Modes
+## Run Profiles
 
-- **Demo mode (default):** boots with in-memory H2 for stakeholder demos and smoke tests
-- **PostgreSQL mode:** for implementation phase with persistence enabled
+- **PostgreSQL profile (default):** main runtime profile for persistent storage
 
 ### Quick Start (Windows PowerShell)
 
 From project root:
 
-- Demo startup: `.\run-demo.ps1`
-- PostgreSQL startup: `.\run-demo.ps1 -Profile postgres`
+- Startup: `.\run.ps1`
 
 The script:
 
 - uses Maven wrapper (no global `mvn` required)
 - resolves a local JDK from `javac` and sets `JAVA_HOME` for the session
 
-## Implemented Thin Slice
+### Quick Start with Docker (Recommended for reviewers)
+
+From project root:
+
+- Start all services: `docker compose up --build`
+- Stop all services: `docker compose down`
+
+Services started by compose:
+
+- API: `http://localhost:8080`
+- PostgreSQL: `localhost:5432`
+- RabbitMQ broker: `localhost:5672`
+- RabbitMQ management UI: `http://localhost:15672` (`guest` / `guest`)
+
+### API Documentation (Swagger)
+
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+
+## Implemented Features
 
 - Domain model and relations:
   - `Freelancer (1) -> (N) Job`
   - `Job (1) -> (N) Comment`
 - Freelancer async evaluation flow:
   - create with `PENDING`
-  - background score computation
+  - publish evaluation message to RabbitMQ
+  - background score computation by queue consumer
   - update to `COMPLETED`/`FAILED`
 - Working endpoints:
   - `POST /api/v1/freelancers`
   - `GET /api/v1/freelancers/{freelancerId}`
   - `GET /api/v1/freelancers`
   - `GET /api/v1/freelancers/search`
+  - `POST /api/v1/jobs`
+  - `GET /api/v1/freelancers/{freelancerId}/jobs`
+  - `GET /api/v1/jobs/{jobId}`
+  - `PATCH /api/v1/jobs/{jobId}`
+  - `POST /api/v1/jobs/{jobId}/comments`
+  - `GET /api/v1/jobs/{jobId}/comments`
+  - `PATCH /api/v1/comments/{commentId}`
 - Consistent error shape via global exception handler
 
-## Proposed Documentation
+## Automated Tests
 
-- `docs/DEMO_PRODUCT_BRIEF.md`: stakeholder-facing product details and roadmap
-- `docs/PROJECT_STRUCTURE.md`: proposed folder/package structure
+- Added controller-level test coverage with `@WebMvcTest` for:
+  - `FreelancerController` (create success, validation error, duplicate email conflict)
+  - `JobController` (create success, update success, invalid update request)
+  - `CommentController` (create success, validation error, update success)
+- Run tests:
+  - `.\mvnw.cmd test`
+- If Maven reports JRE/JDK mismatch:
+  - run `.\run.ps1` once (it resolves and sets `JAVA_HOME`), stop the app with `Ctrl+C`, then run `.\mvnw.cmd test`
 
-## Next Step After Approval
+## Project Documentation
 
-1. Complete Job and Comment API vertical slices
-2. Add unit/integration tests for current endpoints
-3. Add Swagger + Postman collection
-4. Finalize PostgreSQL profile run instructions and delivery README
+- `docs/PRODUCT_BRIEF.md`: scope and implementation order summary
+- `docs/PROJECT_STRUCTURE.md`: package layout and layering notes
+- `postman/Freelance-Marketplace-API.postman_collection.json`: ready-to-import Postman collection
+
+## Suggested Final Enhancements (Optional)
+
+1. Add RabbitMQ retry and dead-letter queue handling
+2. Add service-level integration tests with database test containers
+3. Add CI pipeline for build and test automation

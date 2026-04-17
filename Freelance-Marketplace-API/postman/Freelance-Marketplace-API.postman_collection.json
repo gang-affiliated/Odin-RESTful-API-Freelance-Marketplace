@@ -1,0 +1,170 @@
+{
+  "info": {
+    "_postman_id": "6b5c714a-11fd-4bd0-9be3-9a8f511ecbe1",
+    "name": "Freelance Marketplace API",
+    "description": "Collection for Odine Freelance Marketplace API thin-complete implementation.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Freelancers",
+      "item": [
+        {
+          "name": "Create Freelancer (Developer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mert Kaya\",\n  \"email\": \"mert.kaya@example.com\",\n  \"phone\": \"+90-555-000-3344\",\n  \"city\": \"Ankara\",\n  \"freelancerType\": \"SOFTWARE_DEVELOPER\",\n  \"softwareLanguages\": [\"Java\", \"Python\"],\n  \"specialties\": [\"Backend\", \"API\"]\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/freelancers"
+          }
+        },
+        {
+          "name": "Get Freelancer By Id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/freelancers/{{freelancerId}}"
+          }
+        },
+        {
+          "name": "List Freelancers",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/freelancers"
+          }
+        },
+        {
+          "name": "Search Freelancers",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/freelancers/search?city=Ankara&type=SOFTWARE_DEVELOPER&specialty=Backend"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "Create Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"freelancerId\": {{freelancerId}},\n  \"status\": \"IN_PROGRESS\",\n  \"description\": \"Landing page redesign and component handoff\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/jobs"
+          }
+        },
+        {
+          "name": "Get Jobs Of Freelancer",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/freelancers/{{freelancerId}}/jobs"
+          }
+        },
+        {
+          "name": "Get Job By Id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/{{jobId}}"
+          }
+        },
+        {
+          "name": "Update Job",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"FINISHED\",\n  \"description\": \"Redesign completed and delivered\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/jobs/{{jobId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Create Comment For Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commenterName\": \"ProjectOwner\",\n  \"comment\": \"Great delivery speed and quality\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/jobs/{{jobId}}/comments"
+          }
+        },
+        {
+          "name": "Get Comments Of Job",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/jobs/{{jobId}}/comments"
+          }
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Great delivery speed and communication\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/comments/{{commentId}}"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "freelancerId",
+      "value": "1"
+    },
+    {
+      "key": "jobId",
+      "value": "1"
+    },
+    {
+      "key": "commentId",
+      "value": "1"
+    }
+  ]
+}

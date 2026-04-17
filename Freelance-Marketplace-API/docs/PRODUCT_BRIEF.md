@@ -1,4 +1,4 @@
-# Demo Product Brief
+# Product Brief
 
 ## 1) Vision
 
@@ -7,7 +7,7 @@ The system is designed to be simple to integrate and easy to extend for future m
 
 ## 2) Stakeholder-Focused Outcome
 
-This demo explains:
+This brief explains:
 
 - What product will be delivered
 - Which features are in scope
@@ -57,20 +57,21 @@ This demo explains:
   - Developer score = number of specialties * number of languages
   - Score normalized to range `1..10`
 
-## 5) Proposed Non-Functional Qualities
+## 5) Implementation Order (What We Did, Step by Step)
 
-- Input validation for all write endpoints
-- Consistent API error payloads
-- Search endpoints optimized for common filters
-- Audit-friendly timestamps for job and comment entities
-- Separation of concerns (controller/service/repository layers)
-- Explicit relationship modeling in JPA entities, while keeping normalized tables and foreign keys at database level
+1. Bootstrapped the Spring Boot project with Java 17, Maven Wrapper, and PostgreSQL profile setup.
+2. Modeled the core entities and relationships: `Freelancer (1) -> (N) Job`, `Job (1) -> (N) Comment`.
+3. Implemented Freelancer APIs first (create/list/get/search) with type-specific validation rules.
+4. Added asynchronous freelancer evaluation flow and status tracking (`PENDING`, `COMPLETED`, `FAILED`).
+5. Implemented Job APIs (create/list by freelancer/get/update) and Comment APIs (create/list by job/update).
+6. Added consistent API error handling through a global exception handler and shared error response model.
+7. Added API documentation and API tooling (Swagger/OpenAPI configuration and Postman collection).
+8. Upgraded async processing to RabbitMQ message queue consumer flow.
+9. Dockerized the stack with `app + postgres + rabbitmq` in `docker-compose.yml`.
 
-## 6) Delivery Plan
+## 6) Current State Summary
 
-The first delivery increment includes finalized domain modeling for Freelancer, Job, and Comment plus a working Freelancer API slice.
-This slice demonstrates create/get/list/search flows, validation rules, and asynchronous evaluation status updates.
-
-The next increment completes Job and Comment endpoints with the same service/controller/error-handling approach.
-
-Final packaging will include tests, Swagger/Postman artifacts, and submission-ready project documentation.
+- Core scope is implemented for Freelancer, Job, and Comment domains.
+- API is stateless, versioned under `/api/v1`, and documented with Swagger.
+- Freelancer evaluation runs asynchronously via RabbitMQ consumer processing.
+- Project can run locally with Docker Compose, including database and message broker.

@@ -1,4 +1,4 @@
-# Proposed Project Structure (Demo)
+# Proposed Project Structure
 
 ```text
 Freelance-Marketplace-API/
@@ -6,13 +6,11 @@ Freelance-Marketplace-API/
     main/
       java/com/odine/freelance/marketplace/api/
         config/
-          AsyncConfig.java
+          RabbitMqConfig.java
           OpenApiConfig.java
         common/
           exception/
             GlobalExceptionHandler.java
-            NotFoundException.java
-            ValidationException.java
           response/
             ApiErrorResponse.java
         freelancer/
@@ -21,11 +19,12 @@ Freelance-Marketplace-API/
           dto/
             FreelancerCreateRequest.java
             FreelancerResponse.java
-            FreelancerSearchRequest.java
           entity/
             Freelancer.java
             FreelancerType.java
             EvaluationStatus.java
+          messaging/
+            FreelancerEvaluationConsumer.java
           repository/
             FreelancerRepository.java
           service/
@@ -61,16 +60,19 @@ Freelance-Marketplace-API/
         FreelanceMarketplaceApiApplication.java
       resources/
         application.properties
-        application-dev.properties
-        application-prod.properties
+        application-postgres.properties
     test/
       java/com/odine/freelance/marketplace/api/
-        freelancer/FreelancerControllerTest.java
-        job/JobControllerTest.java
-        comment/CommentControllerTest.java
+        freelancer/controller/FreelancerControllerTest.java
+        job/controller/JobControllerTest.java
+        comment/controller/CommentControllerTest.java
   docs/
-    DEMO_PRODUCT_BRIEF.md
+    PRODUCT_BRIEF.md
     PROJECT_STRUCTURE.md
+  postman/
+    Freelance-Marketplace-API.postman_collection.json
+  docker-compose.yml
+  Dockerfile
   pom.xml
   README.md
 ```
@@ -93,13 +95,22 @@ Freelance-Marketplace-API/
 
 - Used entity references for relationship modeling (`Job -> Freelancer`, `Comment -> Job`) to keep cardinality explicit in code while still persisting normalized foreign keys in separate tables.
 
-## Current vs Planned
+## Current Implementation
 
-- Implemented now:
+- Implemented:
   - `freelancer/controller/FreelancerController`
+  - `job/controller/JobController`
+  - `comment/controller/CommentController`
   - `freelancer/dto/FreelancerCreateRequest`, `FreelancerResponse`
+  - `job/dto/JobCreateRequest`, `JobUpdateRequest`, `JobResponse`
+  - `comment/dto/CommentCreateRequest`, `CommentUpdateRequest`, `CommentResponse`
   - `freelancer/service/FreelancerService`, `FreelancerEvaluationService`
+  - `job/service/JobService`
+  - `comment/service/CommentService`
   - `common/exception/GlobalExceptionHandler`
   - `common/response/ApiErrorResponse`
-- Planned next:
-  - Job and Comment controllers/services/DTO completion
+  - `freelancer/messaging/FreelancerEvaluationConsumer`
+  - `config/RabbitMqConfig`, `config/OpenApiConfig`
+  - Dockerized runtime with `docker-compose.yml` and `Dockerfile`
+  - controller tests for freelancer/job/comment endpoints
+

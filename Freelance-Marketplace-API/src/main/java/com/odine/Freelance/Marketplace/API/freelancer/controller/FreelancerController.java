@@ -4,6 +4,8 @@ import com.odine.Freelance.Marketplace.API.freelancer.dto.FreelancerCreateReques
 import com.odine.Freelance.Marketplace.API.freelancer.dto.FreelancerResponse;
 import com.odine.Freelance.Marketplace.API.freelancer.entity.FreelancerType;
 import com.odine.Freelance.Marketplace.API.freelancer.service.FreelancerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/freelancers")
+@Tag(name = "Freelancers", description = "Freelancer management endpoints")
 public class FreelancerController {
 
     private final FreelancerService freelancerService;
@@ -28,6 +31,7 @@ public class FreelancerController {
     }
 
     @PostMapping
+    @Operation(summary = "Create freelancer", description = "Creates a freelancer and triggers asynchronous evaluation.")
     public ResponseEntity<FreelancerResponse> createFreelancer(
             @Valid @RequestBody @NonNull FreelancerCreateRequest request) {
         FreelancerResponse response = freelancerService.createFreelancer(request);
@@ -35,17 +39,20 @@ public class FreelancerController {
     }
 
     @GetMapping("/{freelancerId}")
+    @Operation(summary = "Get freelancer by id")
     public ResponseEntity<FreelancerResponse> getFreelancer(@PathVariable @NonNull Long freelancerId) {
         FreelancerResponse response = freelancerService.getFreelancer(freelancerId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
+    @Operation(summary = "List all freelancers")
     public ResponseEntity<List<FreelancerResponse>> listFreelancers() {
         return ResponseEntity.ok(freelancerService.listFreelancers());
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search freelancers with optional filters")
     public ResponseEntity<List<FreelancerResponse>> searchFreelancers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String city,

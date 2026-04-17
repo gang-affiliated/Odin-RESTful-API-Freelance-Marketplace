@@ -1,5 +1,6 @@
 package com.odine.Freelance.Marketplace.API.freelancer.service;
 
+import com.odine.Freelance.Marketplace.API.config.RabbitMqConfig;
 import com.odine.Freelance.Marketplace.API.freelancer.entity.EvaluationStatus;
 import com.odine.Freelance.Marketplace.API.freelancer.entity.Freelancer;
 import com.odine.Freelance.Marketplace.API.freelancer.entity.FreelancerType;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -23,13 +25,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class FreelancerService {
 
     private final FreelancerRepository freelancerRepository;
-    private final FreelancerEvaluationService freelancerEvaluationService;
+    private final RabbitTemplate rabbitTemplate;
 
     public FreelancerService(
             FreelancerRepository freelancerRepository,
-            FreelancerEvaluationService freelancerEvaluationService) {
+            RabbitTemplate rabbitTemplate) {
         this.freelancerRepository = freelancerRepository;
-        this.freelancerEvaluationService = freelancerEvaluationService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public FreelancerResponse createFreelancer(@NonNull FreelancerCreateRequest request) {
@@ -44,7 +46,10 @@ public class FreelancerService {
         Freelancer savedFreelancer = Objects.requireNonNull(
                 freelancerRepository.save(freelancer),
                 "Saved freelancer must not be null");
-        freelancerEvaluationService.evaluateAsync(savedFreelancer.getId());
+        rabbitTemplate.convertAndSend(
+                RabbitMqConfig.EVALUATION_EXCHANGE,
+                RabbitMqConfig.EVALUATION_ROUTING_KEY,
+                String.valueOf(savedFreelancer.getId()));
         return mapEntityToResponse(savedFreelancer);
     }
 

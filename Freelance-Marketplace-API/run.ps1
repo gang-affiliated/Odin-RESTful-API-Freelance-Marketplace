@@ -1,5 +1,5 @@
 param(
-    [string]$Profile = "demo"
+    [string]$Profile = "postgres"
 )
 
 $ErrorActionPreference = "Stop"

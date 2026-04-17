@@ -6,7 +6,6 @@ import com.odine.Freelance.Marketplace.API.freelancer.entity.FreelancerType;
 import com.odine.Freelance.Marketplace.API.freelancer.repository.FreelancerRepository;
 import java.util.Objects;
 import java.util.Set;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +18,8 @@ public class FreelancerEvaluationService {
         this.freelancerRepository = freelancerRepository;
     }
 
-    @Async("evaluationTaskExecutor")
     @Transactional
-    public void evaluateAsync(Long freelancerId) {
+    public void evaluateFreelancer(Long freelancerId) {
         Long safeFreelancerId = Objects.requireNonNull(freelancerId, "freelancerId cannot be null");
         try {
             Freelancer freelancer = freelancerRepository.findById(safeFreelancerId).orElse(null);
