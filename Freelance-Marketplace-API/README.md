@@ -43,6 +43,17 @@ The script:
 - uses Maven wrapper (no global `mvn` required)
 - resolves a local JDK from `javac` and sets `JAVA_HOME` for the session
 
+### Quick Start (Linux/macOS)
+
+From project root:
+
+- Startup: `./run.sh`
+
+Script behavior:
+
+- uses Maven wrapper (`./mvnw`)
+- resolves local JDK from `javac` and sets `JAVA_HOME` for the shell session
+
 ### Quick Start with Docker (Recommended for reviewers)
 
 From project root:
@@ -70,6 +81,7 @@ Services started by compose:
 - Freelancer async evaluation flow:
   - create with `PENDING`
   - publish evaluation message to RabbitMQ
+  - wait on configurable mock delay (`freelancer.evaluation.mock-delay-ms`, default 60000 ms)
   - background score computation by queue consumer
   - update to `COMPLETED`/`FAILED`
 - Working endpoints:
@@ -102,9 +114,3 @@ Services started by compose:
 - `docs/PRODUCT_BRIEF.md`: scope and implementation order summary
 - `docs/PROJECT_STRUCTURE.md`: package layout and layering notes
 - `postman/Freelance-Marketplace-API.postman_collection.json`: ready-to-import Postman collection
-
-## Suggested Final Enhancements (Optional)
-
-1. Add RabbitMQ retry and dead-letter queue handling
-2. Add service-level integration tests with database test containers
-3. Add CI pipeline for build and test automation

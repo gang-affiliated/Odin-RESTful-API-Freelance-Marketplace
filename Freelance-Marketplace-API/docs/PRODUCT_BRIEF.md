@@ -57,7 +57,7 @@ This brief explains:
   - Developer score = number of specialties * number of languages
   - Score normalized to range `1..10`
 
-## 5) Implementation Order (What We Did, Step by Step)
+## 5) Delivery Timeline (What Was Implemented)
 
 1. Bootstrapped the Spring Boot project with Java 17, Maven Wrapper, and PostgreSQL profile setup.
 2. Modeled the core entities and relationships: `Freelancer (1) -> (N) Job`, `Job (1) -> (N) Comment`.
@@ -68,10 +68,14 @@ This brief explains:
 7. Added API documentation and API tooling (Swagger/OpenAPI configuration and Postman collection).
 8. Upgraded async processing to RabbitMQ message queue consumer flow.
 9. Dockerized the stack with `app + postgres + rabbitmq` in `docker-compose.yml`.
+10. Added controller-level automated tests for freelancer/job/comment flows (success and edge cases).
+11. Added mock async delay support for evaluation (`freelancer.evaluation.mock-delay-ms`, default 60000 ms).
+12. Added cross-platform run scripts (`run.ps1` and `run.sh`) and root-level README routing for clearer repository entry.
 
 ## 6) Current State Summary
 
 - Core scope is implemented for Freelancer, Job, and Comment domains.
 - API is stateless, versioned under `/api/v1`, and documented with Swagger.
-- Freelancer evaluation runs asynchronously via RabbitMQ consumer processing.
-- Project can run locally with Docker Compose, including database and message broker.
+- Freelancer evaluation runs asynchronously via RabbitMQ consumer processing with configurable mock delay support.
+- Controller-level automated tests cover key success and edge-case API scenarios.
+- Project can run locally with Docker Compose (`app + postgres + rabbitmq`) and with cross-platform run scripts (`run.ps1`, `run.sh`).
